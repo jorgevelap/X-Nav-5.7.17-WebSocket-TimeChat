@@ -2,6 +2,7 @@
 # Example WebSocket Server interface
 # Original taken from: https://github.com/opiate/SimpleWebSocketServer
 # Under the MIT license
+import time
 
 import signal
 import sys
@@ -38,11 +39,14 @@ class SimpleChat(WebSocket):
             self.data = ''
 
         for client in self.server.connections.itervalues():
-            if client != self:
+            #if client != self:
+            if(str(self.data)=="getTime"):
+                    client.sendMessage(str(self.address[0]) + ' - ' + time.strftime("%H:%M:%S"))
+            else:
                 try:
                     client.sendMessage(str(self.address[0]) + ' - ' + str(self.data))
                 except Exception as n:
-                    print n
+                    print n 
 
     def handleConnected(self):
         print self.address, 'connected'
